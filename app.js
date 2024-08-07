@@ -23,9 +23,13 @@ if ('mediaSession' in navigator){
         ]
     });
 
-    navigator.mediaSession.setActionHandler('play', actionHandlers[0][1]);
+    navigator.mediaSession.setActionHandler('play', () => {
+        audioPlayer.play();
+    });
 
-    navigator.mediaSession.setActionHandler('pause', actionHandlers[1][1]);
+    navigator.mediaSession.setActionHandler('pause', () => {
+        audioPlayer.pause();
+    });
 
     navigator.mediaSession.setActionHandler('seekbackward', (details) => {
         audioPlayer.currentTime = Math.max(audioPlayer.currentTime - (details.seekOffset || 10), 0);
@@ -49,6 +53,14 @@ if ('mediaSession' in navigator){
         audioPlayer.pause();
         audioPlayer.currentTime = 0;
     });
+
+    navigator.mediaSession.setActionHandler('seekto', (details) => {
+        if (details.fastSeek && 'fastSeek' in audioPlayer) {
+            audioPlayer.fastSeek(details.seekTime);
+            return;
+        }
+        audioPlayer.currentTime = details.seekTime;
+    });
 }
 
 
@@ -69,6 +81,9 @@ const actionHandlers = [
             audioStatus.innerText = "Status: paused"
         }
     ],
+    [
+        "previoustrack"
+    ]
 ]
 
 for(let [action, handler] of actionHandlers){
