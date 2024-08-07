@@ -9,6 +9,7 @@ if ('serviceWorker' in navigator) {
         });
 }
 
+
 const audioPlayer = document.getElementById('audioPlayer');
 const audioStatus = document.getElementById('audioStatus');
 
@@ -22,13 +23,9 @@ if ('mediaSession' in navigator){
         ]
     });
 
-    navigator.mediaSession.setActionHandler('play', () => {
-        audioPlayer.play();
-    });
+    navigator.mediaSession.setActionHandler('play', actionHandlers[0][1]);
 
-    navigator.mediaSession.setActionHandler('pause', () => {
-        audioPlayer.pause();
-    });
+    navigator.mediaSession.setActionHandler('pause', actionHandlers[1][1]);
 
     navigator.mediaSession.setActionHandler('seekbackward', (details) => {
         audioPlayer.currentTime = Math.max(audioPlayer.currentTime - (details.seekOffset || 10), 0);
@@ -38,28 +35,53 @@ if ('mediaSession' in navigator){
         audioPlayer.currentTime = Math.min(audioPlayer.currentTime + (details.seekOffset || 10), audioPlayer.duration);
     });
 
+    navigator.mediaSession.setActionHandler('previoustrack', (details) => {
+        console.log("previous track!")
+        audioStatus.innerText = "Previous track!"
+    });
+
+    navigator.mediaSession.setActionHandler('nexttrack', (details) => {
+        console.log("next track!")
+        audioStatus.innerText = "Next track!"
+    });    
+
     navigator.mediaSession.setActionHandler('stop', () => {
         audioPlayer.pause();
         audioPlayer.currentTime = 0;
     });
 }
 
-async function playAudioSource(){
-    await audioPlayer.play()
-    navigator.mediaSession.playbackState = "playing";
-    audioStatus.innerText = "Status: playing"
+
+const actionHandlers = [
+    [
+        "play",
+        async () => {
+            await audioPlayer.play()
+            navigator.mediaSession.playbackState = "playing";
+            audioStatus.innerText = "Status: playing"
+        }
+    ],
+    [
+        "pause",
+        () => {
+            audioPlayer.pause()
+            navigator.mediaSession.playbackState = "paused";
+            audioStatus.innerText = "Status: paused"
+        }
+    ],
+]
+
+for(let [action, handler] of actionHandlers){
+    try{
+        navigator.mediaSession.setActionHandler(action, handler);
+    } catch (error) {
+        console.log(`Media Action "${action}" is not supported yet.`);
+    }
 }
 
-async function pauseAudioSource(){
-    audioPlayer.pause()
-    navigator.mediaSession.playbackState = "paused";
-    audioStatus.innerText = "Status: paused"
-}
-
-async function endAudioSource(){
+function audioSourceDefault(){
     audioPlayer.pause()
     navigator.mediaSession.playbackState = "none";
     audioStatus.innerText = "Status: none"
 }
-
-endAudioSource()
+audioSourceDefault()
