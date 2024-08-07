@@ -1,0 +1,10 @@
+{
+    "name": "PWA with Media Controls for Android",
+    "short_name": "PWA Media Controls",
+    "short_url": ".",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#000000",
+    "description": "PWA app for android media playback controls",
+    "icons": []
+}
