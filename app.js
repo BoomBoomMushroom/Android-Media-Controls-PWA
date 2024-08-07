@@ -10,6 +10,7 @@ if ('serviceWorker' in navigator) {
 }
 
 const audioPlayer = document.getElementById('audioPlayer');
+const audioStatus = document.getElementById('audioStatus');
 
 if ('mediaSession' in navigator){
     navigator.mediaSession.metadata = new MediaMetadata({
@@ -17,7 +18,7 @@ if ('mediaSession' in navigator){
         artist: 'Beach Bunny',
         album: 'Honeymoon',
         artwork: [
-            { src: 'colorblind-album-color.png', sizes: '1280x720', type: 'image/png' }
+            { src: 'https://dummyimage.com/96x96', sizes: '96x96', type: 'image/png' }
         ]
     });
 
@@ -42,3 +43,23 @@ if ('mediaSession' in navigator){
         audioPlayer.currentTime = 0;
     });
 }
+
+async function playAudioSource(){
+    await audioPlayer.play()
+    navigator.mediaSession.playbackState = "playing";
+    audioStatus.innerText = "Status: playing"
+}
+
+async function pauseAudioSource(){
+    audioPlayer.pause()
+    navigator.mediaSession.playbackState = "paused";
+    audioStatus.innerText = "Status: paused"
+}
+
+async function endAudioSource(){
+    audioPlayer.pause()
+    navigator.mediaSession.playbackState = "none";
+    audioStatus.innerText = "Status: none"
+}
+
+endAudioSource()
