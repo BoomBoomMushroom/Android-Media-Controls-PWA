@@ -1,12 +1,3 @@
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./service-worker.js')
-        .then((registration) => {
-            console.log('Service Worker registered with scope:', registration.scope);
-        }).catch((error) => {
-            console.log('Service Worker registration failed:', error);
-        });
-}
-
 /*
 if ('Notification' in window && navigator.serviceWorker) {
     Notification.requestPermission(status => {
@@ -131,8 +122,17 @@ function audioSourceDefault(){
     updatePositionState()
 }
 audioSourceDefault()
-mediaSession({title: "Colorblind", artist: "Beach Bunny", album: "Honeymoon"})
 
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./service-worker.js')
+        .then((registration) => {
+            console.log('Service Worker registered with scope:', registration.scope);
+
+            mediaSession({title: "Colorblind", artist: "Beach Bunny", album: "Honeymoon"})
+        }).catch((error) => {
+            console.log('Service Worker registration failed:', error);
+        });
+}
 
 function playMusic(){
     audioPlayer.play();
