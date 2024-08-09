@@ -1,5 +1,6 @@
 
 if ('serviceWorker' in navigator) {
+    /*
     navigator.serviceWorker.register('./service-worker.js')
         .then((registration) => {
             console.log('Service Worker registered with scope:', registration.scope);
@@ -7,116 +8,61 @@ if ('serviceWorker' in navigator) {
         }).catch((error) => {
             console.log('Service Worker registration failed:', error);
         });
+    */
 }
 
-mediaSession({title: "Colorblind", artist: "Beach Bunny", album: "Honeymoon"})
-
-/*
-if ('Notification' in window && navigator.serviceWorker) {
-    Notification.requestPermission(status => {
-        console.log('Notification permission status:', status);
-    });
+window.onload = ()=>{
+    audioPlayer.play()
+    .then(()=>{
+        mediaSession({title: "Colorblind", artist: "Beach Bunny", album: "Honeymoon"})
+    })
+    .catch((e)=>{
+        console.error("Error playing audio! ", e)
+    })
+    
+    setInterval(updatePositionState, 300);
 }
-navigator.serviceWorker.ready.then(function(registration) {
-    registration.showNotification('Playing music', {
-        body: 'Now playing: Colorblind by Beach Bunny',
-        icon: 'https://dummyimage.com/192x192',
-        actions: [
-            {action: 'pause', title: 'Pause'},
-            {action: 'stop', title: 'Stop'}
-        ]
-    });
-});
-*/
 
-var audioPlayer = document.getElementById('audioPlayer');
-var audioStatus = document.getElementById('audioStatus');
+//const audioPlayer = document.getElementById('audioPlayer');
+//const audioStatus = document.getElementById('audioStatus');
 
 function mediaSession(data){
-    if (!('mediaSession' in navigator)) { return }
-    navigator.mediaSession.metadata = new MediaMetadata({
-        title: data.title,
-        artist: data.artist,
-        album: data.album,
-        artwork: [
-            {
-                src: 'https://dummyimage.com/36x36',
-                sizes: '36x36',
-                type: 'image/png',
-            },
-            {
-                src: 'https://dummyimage.com/48x48',
-                sizes: '48x48',
-                type: 'image/png',
-            },
-            {
-                src: 'https://dummyimage.com/72x72',
-                sizes: '72x72',
-                type: 'image/png',
-            },
-            {
-                src: 'https://dummyimage.com/96x96',
-                sizes: '96x96',
-                type: 'image/png',
-            },
-            {
-                src: 'https://dummyimage.com/144x144',
-                sizes: '144x144',
-                type: 'image/png',
-            },
-            {
-                src: 'https://dummyimage.com/192x192',
-                sizes: '192x192',
-                type: 'image/png',
-            },
-            {
-                src: 'https://dummyimage.com/256x256',
-                sizes: '256x256',
-                type: 'image/png',
-            },
-            {
-                src: 'https://dummyimage.com/384x384',
-                sizes: '384x384',
-                type: 'image/png',
-            },
-            {
-                src: 'https://dummyimage.com/512x512',
-                sizes: '512x512',
-                type: 'image/png',
-            }
-        ]
-    });
+    if (!('mediaSession' in navigator)) {
+        console.error("Media Session API is not supported")
+        return
+    }
+
+    try{
+        navigator.mediaSession.metadata = new MediaMetadata({
+            title: data.title,
+            artist: data.artist,
+            album: data.album,
+            artwork: [
+                {
+                    src: 'https://dummyimage.com/36x36',
+                    sizes: '36x36',
+                    type: 'image/png',
+                },
+                // ... (remaining artwork definitions)
+            ]
+        });
+        console.log("successfully made media session metadata")
+    }
+    catch(e){
+        console.error("Error making media session metadata: ", e)
+    }
 
     navigator.mediaSession.setActionHandler('play', () => {
         console.log("play")
         playMusic()
     });
 
-    navigator.mediaSession.setActionHandler('pause', () => {
-        console.log("pause")
-        pauseMusic()
-    });
+    // ... (remaining action handler definitions)
 
-    navigator.mediaSession.setActionHandler('nexttrack', (details) => {
-        console.log("nexttrack")
-        console.log(details)
-        audioStatus.innerText = "Next track!"
-    });    
-
-    navigator.mediaSession.setActionHandler('previoustrack', (details) => {
-        console.log("previoustrack")
-        console.log(details)
-        audioStatus.innerText = "Previous track!"
-    });
-
-    navigator.mediaSession.setActionHandler('stop', () => {
-        console.log("stop")
-        console.log(details)
-        audioPlayer.pause();
-        audioPlayer.currentTime = 0;
-    });
-    navigator.mediaSession.playbackState = "playing";
+    updatePlaybackState("playing");
+    console.log("Media Session initialized with metadata: ", data)
 }
+
 
 
 function updatePlaybackState(state){
@@ -124,26 +70,27 @@ function updatePlaybackState(state){
     audioStatus.innerText = "Status: " + state
 }
 function updatePositionState(){
+    console.log("updatePositionState called!")
     navigator.mediaSession.setPositionState({
         duration: parseInt(audioPlayer.duration) | 100,
         position: parseInt(audioPlayer.currentTime) | 100
     })
 }
+
 function audioSourceDefault(){
-    audioPlayer.pause()
     updatePlaybackState("none")
     updatePositionState()
 }
-audioSourceDefault()
+//audioSourceDefault()
+
 
 function playMusic(){
     audioPlayer.play();
     updatePlaybackState("playing")
+    updatePositionState()
 }
 
 function pauseMusic(){
     audioPlayer.pause();
     updatePlaybackState("paused")
 }
-
-setInterval(updatePositionState, 300);

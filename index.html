@@ -3,23 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PWA with Media Controls</title>
-    <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#000000">
-    <!--
-    <link rel="stylesheet" href="./styles.css">
-    -->
+    <title>MediaSession Test</title>
+    <link rel="manifest" href="/manifest.json">
 </head>
 <body>
     <h1>Media Playback PWA</h1>
-    <h4 id="audioStatus">Status: </h4>
-    <button onclick="playMusic()">Play Music</button>
-    <button onclick="pauseMusic()">Pause Music</button>
-    <br>
-    <br>
-    <audio id="audioPlayer" controls>
-        <source src="./Colorblind-BeachBunny.mp3" type="audio/mpeg">
-        Your browser doesn't support the audio element
-    </audio>
-    <script src="./app.js"></script>
+    <button onclick="initMedia()">Start Music</button>
+    <audio id="audioPlayer" src="./Colorblind-BeachBunny.mp3" controls></audio>
+
+    <script>
+        const audioPlayer = document.getElementById('audioPlayer');
+        function initMedia() {
+            audioPlayer.play().then(() => {
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: "Colorblind",
+                    artist: "Beach Bunny",
+                    album: "Honeymoon",
+                    artwork: [{ src: 'https://dummyimage.com/96x96', sizes: '96x96', type: 'image/png' }]
+                });
+
+                navigator.mediaSession.playbackState = 'playing';
+            }).catch((e) => console.error('Playback error:', e));
+        }
+    </script>
 </body>
+</html>

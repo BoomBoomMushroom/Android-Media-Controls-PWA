@@ -26,5 +26,13 @@
     "background_color": "#FFFFFF",
     "display": "standalone",
     "orientation": "portrait",
-    "prefer-related-application": false
+    "prefer-related-application": false,
+    "permissions": [
+        "mediaSession",
+        "notifications",
+        "sessions",
+        "webNavigation",
+        "menus",
+        "menus.overrideContext"
+    ]
 }
