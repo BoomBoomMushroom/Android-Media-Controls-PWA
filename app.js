@@ -19,7 +19,51 @@ if ('mediaSession' in navigator){
         artist: 'Beach Bunny',
         album: 'Honeymoon',
         artwork: [
-            { src: 'https://dummyimage.com/96x96', sizes: '96x96', type: 'image/png' }
+            {
+                src: 'https://dummyimage.com/36x36',
+                sizes: '36x36',
+                type: 'image/png',
+            },
+            {
+                src: 'https://dummyimage.com/48x48',
+                sizes: '48x48',
+                type: 'image/png',
+            },
+            {
+                src: 'https://dummyimage.com/72x72',
+                sizes: '72x72',
+                type: 'image/png',
+            },
+            {
+                src: 'https://dummyimage.com/96x96',
+                sizes: '96x96',
+                type: 'image/png',
+            },
+            {
+                src: 'https://dummyimage.com/144x144',
+                sizes: '144x144',
+                type: 'image/png',
+            },
+            {
+                src: 'https://dummyimage.com/192x192',
+                sizes: '192x192',
+                type: 'image/png',
+            },
+            {
+                src: 'https://dummyimage.com/256x256',
+                sizes: '256x256',
+                type: 'image/png',
+            },
+            {
+                src: 'https://dummyimage.com/384x384',
+                sizes: '384x384',
+                type: 'image/png',
+            },
+            {
+                src: 'https://dummyimage.com/512x512',
+                sizes: '512x512',
+                type: 'image/png',
+            }
         ]
     });
 
@@ -76,19 +120,29 @@ if ('mediaSession' in navigator){
     });
 }
 
+function updatePositionState(){
+    navigator.mediaSession.setPositionState({
+        duration: audioPlayer.duration | 0,
+        position: audioPlayer.currentTime | 0
+    })
+    
+}
 function audioSourceDefault(){
     audioPlayer.pause()
     navigator.mediaSession.playbackState = "none";
     audioStatus.innerText = "Status: none"
+    updatePositionState()
 }
 audioSourceDefault()
 
 function playMusic(){
     audioPlayer.play();
     navigator.mediaSession.playbackState = "playing";
+    updatePositionState()
 }
 
 function pauseMusic(){
     audioPlayer.pause();
     navigator.mediaSession.playbackState = "paused";
+    updatePositionState()
 }
