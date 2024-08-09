@@ -93,29 +93,6 @@ function mediaSession(data){
         pauseMusic()
     });
 
-    navigator.mediaSession.setActionHandler('seekbackward', (details) => {
-        console.log("seekbackward")
-        console.log(details)
-        //audioPlayer.currentTime = Math.max(audioPlayer.currentTime - (details.seekOffset || 10), 0);
-    });
-
-    navigator.mediaSession.setActionHandler('seekforward', (details) => {
-        console.log("seekforward")
-        console.log(details)
-        //audioPlayer.currentTime = Math.min(audioPlayer.currentTime + (details.seekOffset || 10), audioPlayer.duration);
-    });
-
-    navigator.mediaSession.setActionHandler('seekto', (details) => {
-        console.log("seekto")
-        console.log(details)
-        
-        if (details.fastSeek && 'fastSeek' in audioPlayer) {
-            audioPlayer.fastSeek(details.seekTime);
-            return;
-        }
-        audioPlayer.currentTime = details.seekTime;
-    });
-
     navigator.mediaSession.setActionHandler('nexttrack', (details) => {
         console.log("nexttrack")
         console.log(details)
@@ -134,6 +111,7 @@ function mediaSession(data){
         audioPlayer.pause();
         audioPlayer.currentTime = 0;
     });
+    navigator.mediaSession.playbackState = "playing";
 }
 
 
@@ -143,8 +121,8 @@ function updatePlaybackState(state){
 }
 function updatePositionState(){
     navigator.mediaSession.setPositionState({
-        duration: audioPlayer.duration | 0,
-        position: audioPlayer.currentTime | 0
+        duration: parseInt(audioPlayer.duration) | 100,
+        position: parseInt(audioPlayer.currentTime) | 100
     })
 }
 function audioSourceDefault(){
@@ -165,3 +143,5 @@ function pauseMusic(){
     audioPlayer.pause();
     updatePlaybackState("paused")
 }
+
+setInterval(updatePlaybackState, 300);
