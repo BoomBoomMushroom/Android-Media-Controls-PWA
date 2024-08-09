@@ -1,4 +1,4 @@
-mediaSession({title: "Colorblind", artist: "Beach Bunny", album: "Honeymoon"})
+
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./service-worker.js')
         .then((registration) => {
@@ -9,6 +9,7 @@ if ('serviceWorker' in navigator) {
         });
 }
 
+mediaSession({title: "Colorblind", artist: "Beach Bunny", album: "Honeymoon"})
 
 /*
 if ('Notification' in window && navigator.serviceWorker) {
