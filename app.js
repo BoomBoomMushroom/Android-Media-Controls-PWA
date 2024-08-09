@@ -144,4 +144,4 @@ function pauseMusic(){
     updatePlaybackState("paused")
 }
 
-setInterval(updatePlaybackState, 300);
+setInterval(updatePositionState, 300);
