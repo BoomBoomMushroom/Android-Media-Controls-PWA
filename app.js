@@ -1,3 +1,15 @@
+mediaSession({title: "Colorblind", artist: "Beach Bunny", album: "Honeymoon"})
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./service-worker.js')
+        .then((registration) => {
+            console.log('Service Worker registered with scope:', registration.scope);
+
+        }).catch((error) => {
+            console.log('Service Worker registration failed:', error);
+        });
+}
+
+
 /*
 if ('Notification' in window && navigator.serviceWorker) {
     Notification.requestPermission(status => {
@@ -16,8 +28,8 @@ navigator.serviceWorker.ready.then(function(registration) {
 });
 */
 
-const audioPlayer = document.getElementById('audioPlayer');
-const audioStatus = document.getElementById('audioStatus');
+var audioPlayer = document.getElementById('audioPlayer');
+var audioStatus = document.getElementById('audioStatus');
 
 function mediaSession(data){
     if (!('mediaSession' in navigator)) { return }
@@ -122,17 +134,6 @@ function audioSourceDefault(){
     updatePositionState()
 }
 audioSourceDefault()
-
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./service-worker.js')
-        .then((registration) => {
-            console.log('Service Worker registered with scope:', registration.scope);
-
-            mediaSession({title: "Colorblind", artist: "Beach Bunny", album: "Honeymoon"})
-        }).catch((error) => {
-            console.log('Service Worker registration failed:', error);
-        });
-}
 
 function playMusic(){
     audioPlayer.play();
