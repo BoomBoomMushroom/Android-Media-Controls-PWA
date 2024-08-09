@@ -9,6 +9,22 @@ if ('serviceWorker' in navigator) {
         });
 }
 
+if ('Notification' in window && navigator.serviceWorker) {
+    Notification.requestPermission(status => {
+        console.log('Notification permission status:', status);
+    });
+}
+navigator.serviceWorker.ready.then(function(registration) {
+    registration.showNotification('Playing music', {
+        body: 'Now playing: Colorblind by Beach Bunny',
+        icon: 'https://dummyimage.com/192x192',
+        actions: [
+            {action: 'pause', title: 'Pause'},
+            {action: 'stop', title: 'Stop'}
+        ]
+    });
+});
+
 
 const audioPlayer = document.getElementById('audioPlayer');
 const audioStatus = document.getElementById('audioStatus');
