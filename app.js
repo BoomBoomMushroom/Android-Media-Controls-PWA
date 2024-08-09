@@ -120,29 +120,29 @@ if ('mediaSession' in navigator){
     });
 }
 
+function updatePlaybackState(state){
+    navigator.mediaSession.playbackState = state
+    audioStatus.innerText = "Status: " + state
+}
 function updatePositionState(){
     navigator.mediaSession.setPositionState({
         duration: audioPlayer.duration | 0,
         position: audioPlayer.currentTime | 0
     })
-    
 }
 function audioSourceDefault(){
     audioPlayer.pause()
-    navigator.mediaSession.playbackState = "none";
-    audioStatus.innerText = "Status: none"
+    updatePlaybackState("none")
     updatePositionState()
 }
 audioSourceDefault()
 
 function playMusic(){
     audioPlayer.play();
-    navigator.mediaSession.playbackState = "playing";
-    updatePositionState()
+    updatePlaybackState("playing")
 }
 
 function pauseMusic(){
     audioPlayer.pause();
-    navigator.mediaSession.playbackState = "paused";
-    updatePositionState()
+    updatePlaybackState("paused")
 }
