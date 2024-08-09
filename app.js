@@ -24,74 +24,56 @@ if ('mediaSession' in navigator){
     });
 
     navigator.mediaSession.setActionHandler('play', () => {
-        audioPlayer.play();
+        console.log("play")
+        playMusic()
     });
 
     navigator.mediaSession.setActionHandler('pause', () => {
-        audioPlayer.pause();
+        console.log("pause")
+        pauseMusic()
     });
 
     navigator.mediaSession.setActionHandler('seekbackward', (details) => {
-        audioPlayer.currentTime = Math.max(audioPlayer.currentTime - (details.seekOffset || 10), 0);
+        console.log("seekbackward")
+        console.log(details)
+        //audioPlayer.currentTime = Math.max(audioPlayer.currentTime - (details.seekOffset || 10), 0);
     });
 
     navigator.mediaSession.setActionHandler('seekforward', (details) => {
-        audioPlayer.currentTime = Math.min(audioPlayer.currentTime + (details.seekOffset || 10), audioPlayer.duration);
-    });
-
-    navigator.mediaSession.setActionHandler('previoustrack', (details) => {
-        console.log("previous track!")
-        audioStatus.innerText = "Previous track!"
-    });
-
-    navigator.mediaSession.setActionHandler('nexttrack', (details) => {
-        console.log("next track!")
-        audioStatus.innerText = "Next track!"
-    });    
-
-    navigator.mediaSession.setActionHandler('stop', () => {
-        audioPlayer.pause();
-        audioPlayer.currentTime = 0;
+        console.log("seekforward")
+        console.log(details)
+        //audioPlayer.currentTime = Math.min(audioPlayer.currentTime + (details.seekOffset || 10), audioPlayer.duration);
     });
 
     navigator.mediaSession.setActionHandler('seekto', (details) => {
+        console.log("seekto")
+        console.log(details)
+        
         if (details.fastSeek && 'fastSeek' in audioPlayer) {
             audioPlayer.fastSeek(details.seekTime);
             return;
         }
         audioPlayer.currentTime = details.seekTime;
     });
-}
 
+    navigator.mediaSession.setActionHandler('nexttrack', (details) => {
+        console.log("nexttrack")
+        console.log(details)
+        audioStatus.innerText = "Next track!"
+    });    
 
-const actionHandlers = [
-    [
-        "play",
-        async () => {
-            await audioPlayer.play()
-            navigator.mediaSession.playbackState = "playing";
-            audioStatus.innerText = "Status: playing"
-        }
-    ],
-    [
-        "pause",
-        () => {
-            audioPlayer.pause()
-            navigator.mediaSession.playbackState = "paused";
-            audioStatus.innerText = "Status: paused"
-        }
-    ],
-    [
-        "previoustrack"
-    ]
-]
+    navigator.mediaSession.setActionHandler('previoustrack', (details) => {
+        console.log("previoustrack")
+        console.log(details)
+        audioStatus.innerText = "Previous track!"
+    });
 
-for(let [action, handler] of actionHandlers){
-    try{
-        navigator.mediaSession.setActionHandler(action, handler);
-    } catch (error) {
-        console.log(`Media Action "${action}" is not supported yet.`);
-    }
+    navigator.mediaSession.setActionHandler('stop', () => {
+        console.log("stop")
+        console.log(details)
+        audioPlayer.pause();
+        audioPlayer.currentTime = 0;
+    });
 }
 
 function audioSourceDefault(){
@@ -100,3 +82,13 @@ function audioSourceDefault(){
     audioStatus.innerText = "Status: none"
 }
 audioSourceDefault()
+
+function playMusic(){
+    audioPlayer.play();
+    navigator.mediaSession.playbackState = "playing";
+}
+
+function pauseMusic(){
+    audioPlayer.pause();
+    navigator.mediaSession.playbackState = "paused";
+}

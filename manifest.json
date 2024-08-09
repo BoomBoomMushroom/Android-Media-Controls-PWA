@@ -1,7 +1,7 @@
 {
     "name": "PWA with Media Controls for Android",
     "short_name": "PWA Media Controls",
-    "start_url": "/?home=true",
+    "start_url": "/index.html?home=true",
     "icons": [
         {
             "src": "https://dummyimage.com/96x96",
